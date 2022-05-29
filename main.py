@@ -4,22 +4,14 @@ from vk_api.longpoll import VkLongPoll, VkEventType
 
 def search_by_info(dbpath, data):
     cdb = sqlite3.connect(dbpath)
-    is_email = re.fullmatch(r'([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+', data)
     is_nickname = re.fullmatch(r"[a-zA-Z0-9_\-\.]+", data)
     is_ip = re.fullmatch(r"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}", data)
-    
-    if not cdb:
-        return []
-    
     result = []
 
-    if is_email:
-        get_by_email = cdb.execute("SELECT * FROM `Auth` WHERE `email`=?", [get_info])
+    if not cdb:
+        return result
 
-        for get_row in get_by_email:
-            result.append(get_row)
-
-    elif is_ip:
+    if is_ip:
         get_by_ip = cdb.execute("SELECT * FROM `Auth` WHERE `ip`=?", [get_info])
 
         for get_row in get_by_ip:
@@ -37,13 +29,13 @@ def search_by_info(dbpath, data):
 
 
 def unhash(salt, password):
-    open_base = open("dicts/globalbase.txt", "r")
+    open_base = open("dicts/globalbase.txt", "r", errors="ignore")
     bd_str = [element.strip() for element in open_base.readlines()]
     open_base.close()
 
     for line in bd_str:
         n_str = hashlib.sha256(line.encode("utf-8", errors="ignore")).hexdigest()
-        n_2_str = hashlib.sha256((n_str + salt).encode("utf-8")).hexdigest()
+        n_2_str = hashlib.sha256((n_str + salt).encode("utf-8", errors="ignore")).hexdigest()
 
         if n_2_str == password:
             return line
@@ -79,45 +71,40 @@ if __name__ == "__main__":
                         or len(get_watermine_all_info) \
                         or len(get_fawemc_all_info):
 
-                        if len(get_bomjcraft_all_info):
-                            for info in get_bomjcraft_all_info:
-                                result_msg += f"Nickname: {info[1]}\n"
-                                result_msg += f"Password: {info[2]}\n"
-                                result_msg += f"IP: {info[3]}\n"
-                                result_msg += f"Base: BomjCraft\n"
-                                result_msg += "\n"
+                        for info in get_bomjcraft_all_info:
+                            result_msg += f"Nickname: {info[1]}\n"
+                            result_msg += f"Password: {info[2]}\n"
+                            result_msg += f"IP: {info[3]}\n"
+                            result_msg += f"Base: BomjCraft\n"
+                            result_msg += "\n"
 
-                        if len(get_needmine_all_info):
-                            for info in get_needmine_all_info:
-                                result_msg += f"Nickname: {info[2]}\n"
-                                result_msg += f"Password: {info[3]}\n"
-                                result_msg += f"IP: {info[4]}\n"
-                                result_msg += f"Base: NeedMine\n"
-                                result_msg += "\n"
+                        for info in get_needmine_all_info:
+                            result_msg += f"Nickname: {info[2]}\n"
+                            result_msg += f"Password: {info[3]}\n"
+                            result_msg += f"IP: {info[4]}\n"
+                            result_msg += f"Base: NeedMine\n"
+                            result_msg += "\n"
 
-                        if len(get_lattycraft_all_info):
-                            for info in get_lattycraft_all_info:
-                                result_msg += f"Nickname: {info[1]}\n"
-                                result_msg += f"Password: {info[2]}\n"
-                                result_msg += f"IP: {info[3]}\n"
-                                result_msg += f"Base: LattyCraft\n"
-                                result_msg += "\n"
+                        for info in get_lattycraft_all_info:
+                            result_msg += f"Nickname: {info[1]}\n"
+                            result_msg += f"Password: {info[2]}\n"
+                            result_msg += f"IP: {info[3]}\n"
+                            result_msg += f"Base: LattyCraft\n"
+                            result_msg += "\n"
 
-                        if len(get_watermine_all_info):
-                            for info in get_watermine_all_info:
-                                result_msg += f"Nickname: {info[0]}\n"
-                                result_msg += f"Password: {info[1]}\n"
-                                result_msg += f"IP: {info[4]}\n"
-                                result_msg += f"Base: WaterMine\n"
-                                result_msg += "\n"
+                        for info in get_watermine_all_info:
+                            result_msg += f"Nickname: {info[0]}\n"
+                            result_msg += f"Password: {info[1]}\n"
+                            result_msg += f"IP: {info[4]}\n"
+                            result_msg += f"Base: WaterMine\n"
+                            result_msg += "\n"
 
-                        if len(get_fawemc_all_info):
-                            for info in get_fawemc_all_info:
-                                result_msg += f"Nickname: {info[1]}\n"
-                                result_msg += f"Password: {info[2]}\n"
-                                result_msg += f"IP: {info[3]}\n"
-                                result_msg += f"Base: FaweMC\n"
-                                result_msg += "\n"
+                        for info in get_fawemc_all_info:
+                            result_msg += f"Nickname: {info[1]}\n"
+                            result_msg += f"Password: {info[2]}\n"
+                            result_msg += f"IP: {info[3]}\n"
+                            result_msg += f"Base: FaweMC\n"
+                            result_msg += "\n"
 
                     else:
                         result_msg = "[!] Not found! :(\n"
